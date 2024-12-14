@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:52 by achaisne          #+#    #+#             */
-/*   Updated: 2024/12/12 02:25:58 by achaisne         ###   ########.fr       */
+/*   Updated: 2024/12/14 17:30:17 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,18 @@ typedef struct s_philosopher
 
 }	t_philosopher;
 
+typedef struct s_priority_qeue
+{
+	t_philosopher			*philosopher;
+	struct s_priority_qeue	*next;
+}	t_priority_qeue;
+
 typedef struct s_data_philosopher
 {
 	t_philosopher	**philosophers;
 	t_data_shared	*data_shared;
 	t_philosopher	*self;
+	t_priority_qeue	*qeue;
 }	t_data_philosopher;
 
 
