@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:52 by achaisne          #+#    #+#             */
-/*   Updated: 2024/12/12 02:25:58 by achaisne         ###   ########.fr       */
+/*   Updated: 2024/12/12 05:38:31 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,18 @@
 typedef struct s_data_main
 {
 	int	number_of_philosophers;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
+	long	time_to_die;
+	long	time_to_eat;
+	long	time_to_sleep;
 }	t_data_main;
 
 typedef	struct s_data_shared
 {
 	t_data_main		data_main;
 	pthread_mutex_t	mutex_print;
-	pthread_mutex_t	mutex_eat;
+	pthread_mutex_t	mutex_status;
+	int				is_active_simulation;
+	t_priority_qeue	priority_qeue;
 }	t_data_shared;
 
 typedef enum e_philo_status
@@ -60,6 +62,11 @@ typedef struct s_data_philosopher
 	t_philosopher	*self;
 }	t_data_philosopher;
 
+typedef struct s_priority_queue
+{
+	t_data_philosopher	*philosopher;
+	struct s_priority_queue	*next;
+}	t_priority_qeue;
 
 int		ft_atoi(const char *str);
 int		manage_launch_philosopher(t_data_shared *data);

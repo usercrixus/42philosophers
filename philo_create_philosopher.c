@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 17:43:32 by achaisne          #+#    #+#             */
-/*   Updated: 2024/12/12 02:28:06 by achaisne         ###   ########.fr       */
+/*   Updated: 2024/12/12 05:10:48 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 void	*launch_philosopher(void *arg)
 {
-	t_data_philosopher *data_philosopher = (t_data_philosopher *)arg;
-	data_philosopher->self->timestamp_last_action = get_current_time_in_ms();
-	data_philosopher->self->timestamp_last_eat = data_philosopher->self->timestamp_last_action;
-	pthread_mutex_lock(&(data_philosopher->data_shared->mutex_print));
-	printf("%ld %d is thinking\n", data_philosopher->self->timestamp_last_action, data_philosopher->self->id);
-	pthread_mutex_unlock(&(data_philosopher->data_shared->mutex_print));
-	manage_action(data_philosopher);
+	t_data_philosopher *philosopher = (t_data_philosopher *)arg;
+	philosopher->self->timestamp_last_action = get_current_time_in_ms();
+	philosopher->self->timestamp_last_eat = philosopher->self->timestamp_last_action;
+	pthread_mutex_lock(&(philosopher->data_shared->mutex_print));
+	printf("%ld %d is thinking\n", philosopher->self->timestamp_last_action, philosopher->self->id + 1);
+	pthread_mutex_unlock(&(philosopher->data_shared->mutex_print));
+	manage_action(philosopher);
 	return (NULL);
 }
 

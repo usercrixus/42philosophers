@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:22:35 by achaisne          #+#    #+#             */
-/*   Updated: 2024/12/11 23:10:08 by achaisne         ###   ########.fr       */
+/*   Updated: 2024/12/12 04:20:37 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ int	ft_isspace(char c)
 	return (0);
 }
 
-int	calc_int(int is_neg, const char *str, int i)
+long	calc_int(int is_neg, const char *str, int i)
 {
-	int	result;
+	long	result;
 
 	result = 0;
 	if (is_neg)
@@ -53,9 +53,9 @@ int	calc_int(int is_neg, const char *str, int i)
 	return (result);
 }
 
-int	ft_atoi(const char *str)
+long	ft_atoi(const char *str)
 {
-	int	i;
+	long	i;
 	int	is_neg;
 
 	i = 0;
