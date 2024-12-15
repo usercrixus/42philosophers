@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:52 by achaisne          #+#    #+#             */
-/*   Updated: 2024/12/12 05:38:31 by achaisne         ###   ########.fr       */
+/*   Updated: 2024/12/15 16:59:15 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ typedef	struct s_data_shared
 	pthread_mutex_t	mutex_print;
 	pthread_mutex_t	mutex_status;
 	int				is_active_simulation;
-	t_priority_qeue	priority_qeue;
 }	t_data_shared;
 
 typedef enum e_philo_status
@@ -61,12 +60,6 @@ typedef struct s_data_philosopher
 	t_data_shared	*data_shared;
 	t_philosopher	*self;
 }	t_data_philosopher;
-
-typedef struct s_priority_queue
-{
-	t_data_philosopher	*philosopher;
-	struct s_priority_queue	*next;
-}	t_priority_qeue;
 
 int		ft_atoi(const char *str);
 int		manage_launch_philosopher(t_data_shared *data);

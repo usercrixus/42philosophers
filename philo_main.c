@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:41 by achaisne          #+#    #+#             */
-/*   Updated: 2024/12/12 05:38:54 by achaisne         ###   ########.fr       */
+/*   Updated: 2024/12/15 16:16:00 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ t_data_shared	*get_data_shared(char **argv)
 	pthread_mutex_init(&data_shared->mutex_print, NULL);
 	pthread_mutex_init(&data_shared->mutex_status, NULL);
 	data_shared->is_active_simulation = 1;
-	data_shared->priority_qeue.next = 0;
-	data_shared->priority_qeue.philosopher = 0;
 	return (data_shared);
 }
 
