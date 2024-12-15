@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:41 by achaisne          #+#    #+#             */
-/*   Updated: 2024/12/15 16:16:00 by achaisne         ###   ########.fr       */
+/*   Updated: 2024/12/15 17:35:22 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	set_data_main(char **argv, t_data_main *data_main)
 {
-	data_main->number_of_philosophers = atoi(argv[1]);
+	data_main->num_of_philo = atoi(argv[1]);
 	data_main->time_to_die = atoi(argv[2]);
 	data_main->time_to_eat = atoi(argv[3]);
 	data_main->time_to_sleep = atoi(argv[4]);
@@ -43,6 +43,5 @@ int	main(int argc, char **argv)
 	data_shared = get_data_shared(argv);
 	if (!data_shared)
 		return (1);
-
 	manage_launch_philosopher(data_shared);
 }

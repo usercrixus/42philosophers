@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:52 by achaisne          #+#    #+#             */
-/*   Updated: 2024/12/15 16:59:15 by achaisne         ###   ########.fr       */
+/*   Updated: 2024/12/15 17:50:31 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@
 
 typedef struct s_data_main
 {
-	int	number_of_philosophers;
+	int		num_of_philo;
 	long	time_to_die;
 	long	time_to_eat;
 	long	time_to_sleep;
 }	t_data_main;
 
-typedef	struct s_data_shared
+typedef struct s_data_shared
 {
 	t_data_main		data_main;
 	pthread_mutex_t	mutex_print;
@@ -50,13 +50,13 @@ typedef struct s_philosopher
 	pthread_t		thread_id;
 	t_philo_status	status;
 	long			timestamp_last_action;
-	long			timestamp_last_eat;
+	long			time_last_eat;
 
 }	t_philosopher;
 
 typedef struct s_data_philosopher
 {
-	t_philosopher	**philosophers;
+	t_philosopher	**philos;
 	t_data_shared	*data_shared;
 	t_philosopher	*self;
 }	t_data_philosopher;
@@ -64,7 +64,17 @@ typedef struct s_data_philosopher
 int		ft_atoi(const char *str);
 int		manage_launch_philosopher(t_data_shared *data);
 int		is_eating_possible(t_data_philosopher *philosopher);
-long	get_current_time_in_ms();
+long	get_current_time_in_ms(void);
 int		manage_action(t_data_philosopher *philosopher);
+// set action
+void	set_die(t_data_philosopher *philosopher);
+void	set_think(t_data_philosopher *philosopher);
+void	set_eat(t_data_philosopher *philosopher);
+void	set_sleep(t_data_philosopher *philosopher);
+// condition
+int		is_die(t_data_philosopher *philosopher, long timestamp);
+int		is_think(t_data_philosopher *philosopher, long timestamp);
+int		is_eat(t_data_philosopher *philosopher);
+int		is_sleep(t_data_philosopher *philosopher, long timestamp);
 
 #endif

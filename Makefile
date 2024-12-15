@@ -6,6 +6,8 @@ OBJS = \
 	philo_main.o \
 	philo_manage_action.o \
 	philo_utils.o \
+	philo_set_action.o \
+	philo_status_condition.o \
 
 all: philo
 
