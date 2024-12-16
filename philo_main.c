@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:41 by achaisne          #+#    #+#             */
-/*   Updated: 2024/12/15 17:35:22 by achaisne         ###   ########.fr       */
+/*   Updated: 2024/12/16 21:23:38 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	set_data_main(char **argv, t_data_main *data_main)
 {
-	data_main->num_of_philo = atoi(argv[1]);
-	data_main->time_to_die = atoi(argv[2]);
-	data_main->time_to_eat = atoi(argv[3]);
-	data_main->time_to_sleep = atoi(argv[4]);
+	data_main->num_of_philo = ft_atoi(argv[1]);
+	data_main->time_to_die = ft_atoi(argv[2]);
+	data_main->time_to_eat = ft_atoi(argv[3]);
+	data_main->time_to_sleep = ft_atoi(argv[4]);
 }
 
 t_data_shared	*get_data_shared(char **argv)
@@ -34,6 +34,13 @@ t_data_shared	*get_data_shared(char **argv)
 	return (data_shared);
 }
 
+void	destroy_data_shared(t_data_shared *data_shared)
+{
+	pthread_mutex_destroy(&data_shared->mutex_print);
+	pthread_mutex_destroy(&data_shared->mutex_status);
+	free(data_shared);
+}
+
 int	main(int argc, char **argv)
 {
 	t_data_shared	*data_shared;
@@ -44,4 +51,5 @@ int	main(int argc, char **argv)
 	if (!data_shared)
 		return (1);
 	manage_launch_philosopher(data_shared);
+	destroy_data_shared(data_shared);
 }
