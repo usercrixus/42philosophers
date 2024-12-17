@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:22:35 by achaisne          #+#    #+#             */
-/*   Updated: 2024/12/12 04:20:37 by achaisne         ###   ########.fr       */
+/*   Updated: 2024/12/17 03:21:00 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,26 +37,30 @@ long	calc_int(int is_neg, const char *str, int i)
 
 	result = 0;
 	if (is_neg)
+	{
 		while (str[i] && ft_isdigit(str[i]))
 		{
 			result *= 10;
 			result -= str[i] - '0';
 			i++;
 		}
+	}
 	else
+	{
 		while (str[i] && ft_isdigit(str[i]))
 		{
 			result *= 10;
 			result += str[i] - '0';
 			i++;
 		}
+	}
 	return (result);
 }
 
 long	ft_atoi(const char *str)
 {
 	long	i;
-	int	is_neg;
+	int		is_neg;
 
 	i = 0;
 	while (ft_isspace(str[i]))

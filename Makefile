@@ -2,12 +2,13 @@ MAKEFLAGS += --no-print-directory
 
 OBJS = \
 	ft_atoi.o \
-	philo_create_philosopher.o \
+	philo_launch_philosopher.o \
 	philo_main.o \
 	philo_manage_action.o \
 	philo_utils.o \
 	philo_set_action.o \
 	philo_status_condition.o \
+	philo_close_project.o \
 
 all: philo
 
@@ -25,4 +26,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all bonus clean fclean re push_swap_tester libft.a submodule
+.PHONY: all clean fclean re

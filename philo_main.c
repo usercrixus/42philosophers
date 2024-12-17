@@ -6,50 +6,102 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:41 by achaisne          #+#    #+#             */
-/*   Updated: 2024/12/16 21:23:38 by achaisne         ###   ########.fr       */
+/*   Updated: 2024/12/17 03:35:18 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	set_data_main(char **argv, t_data_main *data_main)
+void	set_data_main(char **argv, t_data_main *data_main, int argc)
 {
 	data_main->num_of_philo = ft_atoi(argv[1]);
 	data_main->time_to_die = ft_atoi(argv[2]);
 	data_main->time_to_eat = ft_atoi(argv[3]);
 	data_main->time_to_sleep = ft_atoi(argv[4]);
+	if (argc == 6)
+		data_main->times_each_philosopher_must_eat = ft_atoi(argv[5]);
+	else
+		data_main->times_each_philosopher_must_eat = -1;
 }
 
-t_data_shared	*get_data_shared(char **argv)
+t_data_shared	*get_data_shared(char **argv, int argc)
 {
 	t_data_shared	*data_shared;
 
 	data_shared = (t_data_shared *)malloc(sizeof(t_data_shared) * 1);
 	if (!data_shared)
 		return (0);
-	set_data_main(argv, &data_shared->data_main);
+	set_data_main(argv, &data_shared->data_main, argc);
 	pthread_mutex_init(&data_shared->mutex_print, NULL);
 	pthread_mutex_init(&data_shared->mutex_status, NULL);
 	data_shared->is_active_simulation = 1;
 	return (data_shared);
 }
 
-void	destroy_data_shared(t_data_shared *data_shared)
+t_philosopher	**get_philosophers(t_data_shared *data_shared)
 {
-	pthread_mutex_destroy(&data_shared->mutex_print);
-	pthread_mutex_destroy(&data_shared->mutex_status);
-	free(data_shared);
+	int				i;
+	t_philosopher	**philosophers;
+
+	philosophers = malloc(sizeof(t_philosopher *)
+			* data_shared->data_main.num_of_philo);
+	if (!philosophers)
+		return (0);
+	i = 0;
+	while (i < data_shared->data_main.num_of_philo)
+	{
+		philosophers[i] = (t_philosopher *)malloc(sizeof(t_philosopher) * 1);
+		if (!philosophers[i])
+			return (0);
+		philosophers[i]->id = i;
+		philosophers[i]->status = THINK;
+		philosophers[i]->thread_id = 0;
+		philosophers[i]->time_last_eat = 0;
+		philosophers[i]->timestamp_last_action = 0;
+		philosophers[i]->fork.available = 1;
+		philosophers[i]->fork.last_user = 0;
+		philosophers[i]->number_of_eat = 0;
+		i++;
+	}
+	return (philosophers);
+}
+
+t_data_philosopher	**get_data_philosophers(t_data_shared *data_shared)
+{
+	int					i;
+	t_data_philosopher	**data_philosopher;
+	t_philosopher		**philosophers;
+
+	if (!data_shared)
+		return (0);
+	philosophers = get_philosophers(data_shared);
+	if (!philosophers)
+		return (0);
+	data_philosopher = malloc(sizeof(t_data_philosopher *)
+			* data_shared->data_main.num_of_philo);
+	if (!data_philosopher)
+		return (0);
+	i = 0;
+	while (i < data_shared->data_main.num_of_philo)
+	{
+		data_philosopher[i] = malloc(sizeof(t_data_philosopher));
+		data_philosopher[i]->philos = philosophers;
+		data_philosopher[i]->data_shared = data_shared;
+		data_philosopher[i]->self = philosophers[i];
+		i++;
+	}
+	return (data_philosopher);
 }
 
 int	main(int argc, char **argv)
 {
-	t_data_shared	*data_shared;
+	t_data_philosopher	**data_philosopher;
 
-	if (argc != 5)
+	if (argc < 5 && argc > 6)
 		return (printf("Usage Error\n"), 1);
-	data_shared = get_data_shared(argv);
-	if (!data_shared)
+	data_philosopher = get_data_philosophers(get_data_shared(argv, argc));
+	if (!data_philosopher)
 		return (1);
-	manage_launch_philosopher(data_shared);
-	destroy_data_shared(data_shared);
+	manage_launch_philosopher(data_philosopher);
+	destroy_all(data_philosopher);
 }

@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:52 by achaisne          #+#    #+#             */
-/*   Updated: 2024/12/15 17:50:31 by achaisne         ###   ########.fr       */
+/*   Updated: 2024/12/17 03:26:53 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct s_data_main
 	long	time_to_die;
 	long	time_to_eat;
 	long	time_to_sleep;
+	int		times_each_philosopher_must_eat;
 }	t_data_main;
 
 typedef struct s_data_shared
@@ -44,6 +45,13 @@ typedef enum e_philo_status
 	DEAD
 }	t_philo_status;
 
+typedef struct s_philosopher	t_philosopher;
+typedef struct s_fork
+{
+	int				available;
+	t_philosopher	*last_user;
+}	t_fork;
+
 typedef struct s_philosopher
 {
 	int				id;
@@ -51,6 +59,8 @@ typedef struct s_philosopher
 	t_philo_status	status;
 	long			timestamp_last_action;
 	long			time_last_eat;
+	t_fork			fork;
+	int				number_of_eat;
 
 }	t_philosopher;
 
@@ -61,20 +71,25 @@ typedef struct s_data_philosopher
 	t_philosopher	*self;
 }	t_data_philosopher;
 
-int		ft_atoi(const char *str);
-int		manage_launch_philosopher(t_data_shared *data);
-int		is_eating_possible(t_data_philosopher *philosopher);
-long	get_current_time_in_ms(void);
-int		manage_action(t_data_philosopher *philosopher);
+//atoi
+int					ft_atoi(const char *str);
+//create philosopher
+void				manage_launch_philosopher(t_data_philosopher **data_philos);
+// philo utils
+long				get_current_time_in_ms(void);
+//manage action
+int					manage_action(t_data_philosopher *data_philos);
+//close project
+void				destroy_all(t_data_philosopher **data_philos);
 // set action
-void	set_die(t_data_philosopher *philosopher);
-void	set_think(t_data_philosopher *philosopher);
-void	set_eat(t_data_philosopher *philosopher);
-void	set_sleep(t_data_philosopher *philosopher);
+void				set_die(t_data_philosopher *data_philos);
+void				set_think(t_data_philosopher *data_philos);
+void				set_eat(t_data_philosopher *data_philos);
+void				set_sleep(t_data_philosopher *data_philos);
 // condition
-int		is_die(t_data_philosopher *philosopher, long timestamp);
-int		is_think(t_data_philosopher *philosopher, long timestamp);
-int		is_eat(t_data_philosopher *philosopher);
-int		is_sleep(t_data_philosopher *philosopher, long timestamp);
+int					is_die(t_data_philosopher *data_philos, long timestamp);
+int					is_think(t_data_philosopher *data_philos, long timestamp);
+int					is_eat(t_data_philosopher *data_philos);
+int					is_sleep(t_data_philosopher *data_philos, long timestamp);
 
 #endif
