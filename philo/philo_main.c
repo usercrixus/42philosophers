@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:41 by achaisne          #+#    #+#             */
-/*   Updated: 2024/12/17 03:35:18 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/06 17:08:18 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,10 @@ t_data_shared	*get_data_shared(char **argv, int argc)
 	if (!data_shared)
 		return (0);
 	set_data_main(argv, &data_shared->data_main, argc);
-	pthread_mutex_init(&data_shared->mutex_print, NULL);
-	pthread_mutex_init(&data_shared->mutex_status, NULL);
+	if (pthread_mutex_init(&data_shared->mutex_print, NULL) != 0)
+		return (0);
+	if (pthread_mutex_init(&data_shared->mutex_status, NULL) != 0)
+		return (0);
 	data_shared->is_active_simulation = 1;
 	return (data_shared);
 }
@@ -72,11 +74,7 @@ t_data_philosopher	**get_data_philosophers(t_data_shared *data_shared)
 	t_data_philosopher	**data_philosopher;
 	t_philosopher		**philosophers;
 
-	if (!data_shared)
-		return (0);
 	philosophers = get_philosophers(data_shared);
-	if (!philosophers)
-		return (0);
 	data_philosopher = malloc(sizeof(t_data_philosopher *)
 			* data_shared->data_main.num_of_philo);
 	if (!data_philosopher)
@@ -96,12 +94,16 @@ t_data_philosopher	**get_data_philosophers(t_data_shared *data_shared)
 int	main(int argc, char **argv)
 {
 	t_data_philosopher	**data_philosopher;
+	t_data_shared		*data_shared;
 
 	if (argc < 5 && argc > 6)
 		return (printf("Usage Error\n"), 1);
-	data_philosopher = get_data_philosophers(get_data_shared(argv, argc));
-	if (!data_philosopher)
+	data_shared = get_data_shared(argv, argc);
+	if (!data_shared)
 		return (1);
+	data_philosopher = get_data_philosophers(data_shared);
+	if (!data_philosopher)
+		return (destroy_data_shared(data_shared), 1);
 	manage_launch_philosopher(data_philosopher);
 	destroy_all(data_philosopher);
 }
