@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 17:21:11 by achaisne          #+#    #+#             */
-/*   Updated: 2024/12/17 03:17:59 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/06 18:14:34 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,18 @@ void	set_sleep(t_data_philosopher *philosopher)
 	long	timestamp;
 	int		left;
 
-	if (philosopher->self->id == 0)
-		left = philosopher->data_shared->data_main.num_of_philo - 1;
-	else
-		left = philosopher->self->id - 1;
-	philosopher->self->fork.available = 1;
-	philosopher->philos[left]->fork.available = 1;
 	philosopher->self->number_of_eat++;
-	timestamp = get_current_time_in_ms();
-	philosopher->self->status = SLEEP;
-	philosopher->self->timestamp_last_action = timestamp;
-	print_action(philosopher, "is sleeping");
+	if (!is_reach_eat_times(philosopher))
+	{
+		if (philosopher->self->id == 0)
+			left = philosopher->data_shared->data_main.num_of_philo - 1;
+		else
+			left = philosopher->self->id - 1;
+		philosopher->self->fork.available = 1;
+		philosopher->philos[left]->fork.available = 1;
+		timestamp = get_current_time_in_ms();
+		philosopher->self->status = SLEEP;
+		philosopher->self->timestamp_last_action = timestamp;
+		print_action(philosopher, "is sleeping");
+	}
 }

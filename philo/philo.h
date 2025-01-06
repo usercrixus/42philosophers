@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:52 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/06 17:15:27 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/06 18:12:05 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int					ft_atoi(const char *str);
 void				manage_launch_philosopher(t_data_philosopher **data_philos);
 // philo utils
 long				get_current_time_in_ms(void);
+int					is_reach_eat_times(t_data_philosopher *philos);
 //manage action
 int					manage_action(t_data_philosopher *data_philos);
 //close project
