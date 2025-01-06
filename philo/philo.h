@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:52 by achaisne          #+#    #+#             */
-/*   Updated: 2024/12/17 03:26:53 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/06 17:15:27 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ long				get_current_time_in_ms(void);
 int					manage_action(t_data_philosopher *data_philos);
 //close project
 void				destroy_all(t_data_philosopher **data_philos);
+void				destroy_data_shared(t_data_shared *data_shared);
 // set action
 void				set_die(t_data_philosopher *data_philos);
 void				set_think(t_data_philosopher *data_philos);
