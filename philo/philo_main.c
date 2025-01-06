@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:41 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/06 17:08:18 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/06 17:25:57 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	main(int argc, char **argv)
 	t_data_philosopher	**data_philosopher;
 	t_data_shared		*data_shared;
 
-	if (argc < 5 && argc > 6)
+	if (argc < 5 || argc > 6)
 		return (printf("Usage Error\n"), 1);
 	data_shared = get_data_shared(argv, argc);
 	if (!data_shared)
