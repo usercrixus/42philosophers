@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 17:21:11 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/07 18:04:52 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/07 18:24:45 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,11 @@ void	set_die(t_data_philosopher *philosopher)
 	timestamp = get_current_time_in_ms();
 	philosopher->self->timestamp_last_action = timestamp;
 	philosopher->self->status = DEAD;
-	print_action(philosopher, "died");
 	philosopher->data_shared->is_active_simulation = 0;
+	pthread_mutex_lock(&(philosopher->data_shared->mutex_print));
+	printf("%ld %d %s\n", philosopher->self->timestamp_last_action,
+		philosopher->self->id + 1, "died");
+	pthread_mutex_unlock(&(philosopher->data_shared->mutex_print));
 }
 
 void	set_think(t_data_philosopher *philosopher)
