@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 17:21:11 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/06 18:14:34 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/07 18:04:52 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 void	print_action(t_data_philosopher *philosopher, const char *str)
 {
 	pthread_mutex_lock(&(philosopher->data_shared->mutex_print));
-	printf("%ld %d %s\n", philosopher->self->timestamp_last_action,
-		philosopher->self->id + 1, str);
+	if (philosopher->data_shared->is_active_simulation)
+		printf("%ld %d %s\n", philosopher->self->timestamp_last_action,
+			philosopher->self->id + 1, str);
 	pthread_mutex_unlock(&(philosopher->data_shared->mutex_print));
 }
 
@@ -55,8 +56,10 @@ void	set_eat(t_data_philosopher *philosopher)
 		left = philosopher->data_shared->data_main.num_of_philo - 1;
 	else
 		left = philosopher->self->id - 1;
+	lock_fork(philosopher, left);
 	philosopher->self->fork.available = 0;
 	philosopher->philos[left]->fork.available = 0;
+	unlock_fork(philosopher, left);
 	philosopher->self->fork.last_user = philosopher->self;
 	philosopher->philos[left]->fork.last_user = philosopher->self;
 	print_action(philosopher, "has taken a fork");

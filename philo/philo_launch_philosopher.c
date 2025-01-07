@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 17:43:32 by achaisne          #+#    #+#             */
-/*   Updated: 2024/12/17 03:35:11 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/07 18:09:14 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,7 @@ void	*launch_philosophers(void *arg)
 	philosopher = (t_data_philosopher *)arg;
 	philosopher->self->timestamp_last_action = get_current_time_in_ms();
 	philosopher->self->time_last_eat = philosopher->self->timestamp_last_action;
-	pthread_mutex_lock(&(philosopher->data_shared->mutex_print));
-	printf("%ld %d is thinking\n",
-		philosopher->self->timestamp_last_action, philosopher->self->id + 1);
-	pthread_mutex_unlock(&(philosopher->data_shared->mutex_print));
+	print_action(philosopher, "is thinking");
 	manage_action(philosopher);
 	return (NULL);
 }

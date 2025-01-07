@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:41 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/06 17:27:43 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/07 17:56:02 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ t_data_shared	*get_data_shared(char **argv, int argc)
 	set_data_main(argv, &data_shared->data_main, argc);
 	if (pthread_mutex_init(&data_shared->mutex_print, NULL) != 0)
 		return (0);
-	if (pthread_mutex_init(&data_shared->mutex_status, NULL) != 0)
-		return (0);
 	data_shared->is_active_simulation = 1;
 	return (data_shared);
 }
@@ -53,7 +51,8 @@ t_philosopher	**get_philosophers(t_data_shared *data_shared)
 	while (i < data_shared->data_main.num_of_philo)
 	{
 		philosophers[i] = (t_philosopher *)malloc(sizeof(t_philosopher) * 1);
-		if (!philosophers[i])
+		if (!philosophers[i]
+			|| pthread_mutex_init(&philosophers[i]->fork.mutex_fork, NULL) != 0)
 			return (0);
 		philosophers[i]->id = i;
 		philosophers[i]->status = THINK;

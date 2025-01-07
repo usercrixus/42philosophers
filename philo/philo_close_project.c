@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 02:25:02 by achaisne          #+#    #+#             */
-/*   Updated: 2024/12/17 03:34:59 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/07 17:50:16 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	destroy_data_shared(t_data_shared *data_shared)
 {
 	pthread_mutex_destroy(&data_shared->mutex_print);
-	pthread_mutex_destroy(&data_shared->mutex_status);
 	free(data_shared);
 }
 
@@ -26,6 +25,7 @@ void	destroy_philosophers(t_philosopher **philos, int size)
 	i = 0;
 	while (i < size)
 	{
+		pthread_mutex_destroy(&philos[i]->fork.mutex_fork);
 		free(philos[i]);
 		i++;
 	}
