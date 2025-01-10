@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 17:21:11 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/10 16:59:27 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/10 20:55:53 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void	set_eat(t_data_philosopher *philosopher)
 		left = philosopher->data_shared->data_main.num_of_philo - 1;
 	else
 		left = philosopher->self->id - 1;
-	lock_fork(philosopher, left);
 	philosopher->self->fork.available = 0;
 	philosopher->philos[left]->fork.available = 0;
 	unlock_fork(philosopher, left);

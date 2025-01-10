@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:41 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/10 17:01:49 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/10 21:13:32 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,14 +95,17 @@ int	main(int argc, char **argv)
 	t_data_philosopher	**data_philosopher;
 	t_data_shared		*data_shared;
 
-	if (argc < 5 || argc > 6)
+	if ((argc < 5 || argc > 6) || !is_verified_input(argv + 1, argc - 1))
 		return (printf("Usage Error\n"), 1);
 	data_shared = get_data_shared(argv, argc);
 	if (!data_shared)
 		return (1);
+	if (data_shared->data_main.num_of_philo == 0)
+		return (0);
 	data_philosopher = get_data_philosophers(data_shared);
 	if (!data_philosopher)
 		return (destroy_data_shared(data_shared), 1);
 	manage_launch_philosopher(data_philosopher);
 	destroy_all(data_philosopher);
+	return (0);
 }

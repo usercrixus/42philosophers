@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:52 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/10 16:59:28 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/10 21:04:23 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,11 @@ typedef struct s_data_philosopher
 	t_philosopher	*self;
 }	t_data_philosopher;
 
+//verify input
+int		is_verified_input(char **s, int size);
 //atoi
 int		ft_atoi(const char *str);
+int		ft_isdigit(int c);
 //create philosopher
 void	manage_launch_philosopher(t_data_philosopher **data_philos);
 // philo utils

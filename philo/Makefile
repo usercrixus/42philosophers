@@ -10,6 +10,7 @@ OBJS = \
 	philo_status_condition.o \
 	philo_close_project.o \
 	philo_lock_fork.o \
+	philo_verify_input.o \
 
 all: philo
 
