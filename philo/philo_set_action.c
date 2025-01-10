@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 17:21:11 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/10 20:55:53 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/10 22:00:42 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ void	set_eat(t_data_philosopher *philosopher)
 	print_action(philosopher, "has taken a fork");
 	print_action(philosopher, "has taken a fork");
 	print_action(philosopher, "is eating");
+	usleep(ft_min(philosopher->data_shared->data_main.time_to_eat,
+		philosopher->data_shared->data_main.time_to_die - (timestamp - philosopher->self->time_last_eat)));
 }
 
 void	set_sleep(t_data_philosopher *philosopher)
@@ -88,5 +90,7 @@ void	set_sleep(t_data_philosopher *philosopher)
 		philosopher->self->status = SLEEP;
 		philosopher->self->timestamp_last_action = timestamp;
 		print_action(philosopher, "is sleeping");
+		usleep(ft_min(philosopher->data_shared->data_main.time_to_sleep,
+			philosopher->data_shared->data_main.time_to_die - (timestamp - philosopher->self->time_last_eat)));
 	}
 }
