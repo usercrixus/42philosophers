@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 17:43:32 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/10 16:59:25 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/11 03:37:40 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ void	manage_launch_philosopher(t_data_philosopher **data_philos)
 	int	i;
 
 	i = 0;
-	while (i < data_philos[0]->data_shared->data_main.num_of_philo)
+	while (i < data_philos[0]->data_shared->data_main.size_philo)
 	{
 		pthread_create(&(data_philos[i]->self->thread_id), NULL,
 			launch_philosophers, data_philos[i]);
 		i++;
 	}
 	i = 0;
-	while (i < data_philos[0]->data_shared->data_main.num_of_philo)
+	while (i < data_philos[0]->data_shared->data_main.size_philo)
 	{
 		pthread_join(data_philos[i]->self->thread_id, NULL);
 		i++;

@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 23:46:03 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/10 21:12:02 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/11 03:18:09 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ int	manage_action(t_data_philosopher *philos)
 	{
 		timestamp = get_current_time_in_ms();
 		if (is_die(philos, timestamp))
-			set_die(philos);
+			set_die(philos, timestamp);
 		else if (is_think(philos, timestamp))
-			set_think(philos);
+			set_think(philos, timestamp);
 		else if (is_eat(philos))
-			set_eat(philos);
+			set_eat(philos, timestamp);
 		else if (is_sleep(philos, timestamp))
-			set_sleep(philos);
+			set_sleep(philos, timestamp);
 	}
 	return (1);
 }

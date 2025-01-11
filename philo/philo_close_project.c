@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 02:25:02 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/07 17:50:16 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/11 03:26:33 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void	destroy_data_shared(t_data_shared *data_shared)
 {
-	pthread_mutex_destroy(&data_shared->mutex_print);
+	pthread_mutex_destroy(&data_shared->mutex_active_simulation);
+	pthread_mutex_destroy(&data_shared->mutex_sum_eat);
 	free(data_shared);
 }
 
@@ -49,7 +50,7 @@ void	destroy_all(t_data_philosopher **data_philos)
 {
 	int	size;
 
-	size = data_philos[0]->data_shared->data_main.num_of_philo;
+	size = data_philos[0]->data_shared->data_main.size_philo;
 	destroy_data_shared(data_philos[0]->data_shared);
 	destroy_philosophers(data_philos[0]->philos, size);
 	destroy_data_philosopher(data_philos, size);

@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:52 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/10 21:51:46 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/11 03:50:55 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 typedef struct s_data_main
 {
-	int		num_of_philo;
+	int		size_philo;
 	long	time_to_die;
 	long	time_to_eat;
 	long	time_to_sleep;
@@ -32,8 +32,10 @@ typedef struct s_data_main
 typedef struct s_data_shared
 {
 	t_data_main		data_main;
-	pthread_mutex_t	mutex_print;
+	pthread_mutex_t	mutex_active_simulation;
 	int				is_active_simulation;
+	pthread_mutex_t	mutex_sum_eat;
+	int				sum_eat;
 }	t_data_shared;
 
 typedef enum e_philo_status
@@ -69,6 +71,7 @@ typedef struct s_data_philosopher
 	t_philosopher	**philos;
 	t_data_shared	*data_shared;
 	t_philosopher	*self;
+	t_philosopher	*left;
 }	t_data_philosopher;
 
 //verify input
@@ -80,7 +83,7 @@ int		ft_isdigit(int c);
 void	manage_launch_philosopher(t_data_philosopher **data_philos);
 // philo utils
 long	get_current_time_in_ms(void);
-int		is_reach_eat_times(t_data_philosopher *philos);
+int		set_eat_times(t_data_philosopher *philos);
 int		ft_min(int x, int y);
 //manage action
 int		manage_action(t_data_philosopher *data_philos);
@@ -88,14 +91,14 @@ int		manage_action(t_data_philosopher *data_philos);
 void	destroy_all(t_data_philosopher **data_philos);
 void	destroy_data_shared(t_data_shared *data_shared);
 // set action
-void	set_die(t_data_philosopher *data_philos);
-void	set_think(t_data_philosopher *data_philos);
-void	set_eat(t_data_philosopher *data_philos);
-void	set_sleep(t_data_philosopher *data_philos);
+void	set_die(t_data_philosopher *data_philos, long timestamp);
+void	set_think(t_data_philosopher *data_philos, long timestamp);
+void	set_eat(t_data_philosopher *data_philos, long timestamp);
+void	set_sleep(t_data_philosopher *data_philos, long timestamp);
 void	print_action(t_data_philosopher *philosopher, const char *str);
 // lock fork
-void	unlock_fork(t_data_philosopher *philosopher, int left);
-void	lock_fork(t_data_philosopher *philosopher, int left);
+void	unlock_fork(t_data_philosopher *philosopher, t_philosopher *left);
+void	lock_fork(t_data_philosopher *philosopher, t_philosopher *left);
 // condition
 int		is_die(t_data_philosopher *data_philos, long timestamp);
 int		is_think(t_data_philosopher *data_philos, long timestamp);

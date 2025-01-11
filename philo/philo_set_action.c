@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 17:21:11 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/10 22:00:42 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/11 03:50:55 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,83 +14,64 @@
 
 void	print_action(t_data_philosopher *philosopher, const char *str)
 {
-	pthread_mutex_lock(&(philosopher->data_shared->mutex_print));
+	pthread_mutex_lock(&(philosopher->data_shared->mutex_active_simulation));
 	if (philosopher->data_shared->is_active_simulation)
 		printf("%ld %d %s\n", philosopher->self->timestamp_last_action,
 			philosopher->self->id + 1, str);
-	pthread_mutex_unlock(&(philosopher->data_shared->mutex_print));
+	pthread_mutex_unlock(&(philosopher->data_shared->mutex_active_simulation));
 }
 
-void	set_die(t_data_philosopher *philosopher)
+void	set_die(t_data_philosopher *philosopher, long timestamp)
 {
-	long	timestamp;
-
-	timestamp = get_current_time_in_ms();
 	philosopher->self->timestamp_last_action = timestamp;
 	philosopher->self->status = DEAD;
-	pthread_mutex_lock(&(philosopher->data_shared->mutex_print));
+	pthread_mutex_lock(&(philosopher->data_shared->mutex_active_simulation));
 	if (philosopher->data_shared->is_active_simulation)
 		printf("%ld %d %s\n", philosopher->self->timestamp_last_action,
 			philosopher->self->id + 1, "died");
 	philosopher->data_shared->is_active_simulation = 0;
-	pthread_mutex_unlock(&(philosopher->data_shared->mutex_print));
+	pthread_mutex_unlock(&(philosopher->data_shared->mutex_active_simulation));
 }
 
-void	set_think(t_data_philosopher *philosopher)
+void	set_think(t_data_philosopher *philosopher, long timestamp)
 {
-	long	timestamp;
-
-	timestamp = get_current_time_in_ms();
 	philosopher->self->status = THINK;
 	philosopher->self->timestamp_last_action = timestamp;
 	print_action(philosopher, "is thinking");
 }
 
-void	set_eat(t_data_philosopher *philosopher)
+void	set_eat(t_data_philosopher *philosopher, long timestamp)
 {
-	long	timestamp;
-	int		left;
-
-	left = 0;
-	timestamp = get_current_time_in_ms();
+	lock_fork(philosopher, philosopher->left);
+	if (philosopher->self->fork.available == 0
+		|| philosopher->left->fork.available == 0)
+		return (unlock_fork(philosopher, philosopher->left));
+	philosopher->self->fork.available = 0;
+	philosopher->left->fork.available = 0;
+	unlock_fork(philosopher, philosopher->left);
 	philosopher->self->status = EAT;
 	philosopher->self->timestamp_last_action = timestamp;
 	philosopher->self->time_last_eat = timestamp;
-	if (philosopher->self->id == 0)
-		left = philosopher->data_shared->data_main.num_of_philo - 1;
-	else
-		left = philosopher->self->id - 1;
-	philosopher->self->fork.available = 0;
-	philosopher->philos[left]->fork.available = 0;
-	unlock_fork(philosopher, left);
 	philosopher->self->fork.last_user = philosopher->self;
-	philosopher->philos[left]->fork.last_user = philosopher->self;
+	philosopher->left->fork.last_user = philosopher->self;
 	print_action(philosopher, "has taken a fork");
 	print_action(philosopher, "has taken a fork");
 	print_action(philosopher, "is eating");
-	usleep(ft_min(philosopher->data_shared->data_main.time_to_eat,
-		philosopher->data_shared->data_main.time_to_die - (timestamp - philosopher->self->time_last_eat)));
+	usleep(980 * ft_min(philosopher->data_shared->data_main.time_to_eat,
+			philosopher->data_shared->data_main.time_to_die
+			- (timestamp - philosopher->self->time_last_eat)));
 }
 
-void	set_sleep(t_data_philosopher *philosopher)
+void	set_sleep(t_data_philosopher *philosopher, long timestamp)
 {
-	long	timestamp;
-	int		left;
-
 	philosopher->self->number_of_eat++;
-	if (!is_reach_eat_times(philosopher))
-	{
-		if (philosopher->self->id == 0)
-			left = philosopher->data_shared->data_main.num_of_philo - 1;
-		else
-			left = philosopher->self->id - 1;
-		philosopher->self->fork.available = 1;
-		philosopher->philos[left]->fork.available = 1;
-		timestamp = get_current_time_in_ms();
-		philosopher->self->status = SLEEP;
-		philosopher->self->timestamp_last_action = timestamp;
-		print_action(philosopher, "is sleeping");
-		usleep(ft_min(philosopher->data_shared->data_main.time_to_sleep,
-			philosopher->data_shared->data_main.time_to_die - (timestamp - philosopher->self->time_last_eat)));
-	}
+	set_eat_times(philosopher);
+	philosopher->self->fork.available = 1;
+	philosopher->left->fork.available = 1;
+	philosopher->self->status = SLEEP;
+	philosopher->self->timestamp_last_action = timestamp;
+	print_action(philosopher, "is sleeping");
+	usleep(980 * ft_min(philosopher->data_shared->data_main.time_to_sleep,
+			philosopher->data_shared->data_main.time_to_die
+			- (timestamp - philosopher->self->time_last_eat)));
 }
