@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 00:13:55 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/12 01:18:34 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/12 00:29:03 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,15 @@ int	set_eat_times(t_data_philosopher *philos)
 	if (philos->self->number_of_eat
 		== philos->data_shared->data_main.times_each_philosopher_must_eat)
 	{
-		pthread_mutex_lock(&(philos->data_shared->mutex_sum_eat));
+		sem_wait(philos->data_shared->sem_sum_eat);
 		philos->data_shared->sum_eat++;
-		pthread_mutex_unlock(&(philos->data_shared->mutex_sum_eat));
+		sem_post(philos->data_shared->sem_sum_eat);
 		if (philos->data_shared->sum_eat
 			>= philos->data_shared->data_main.size_philo)
 		{
-			pthread_mutex_lock(&(philos->data_shared->mutex_active_simulation));
+			sem_wait(philos->data_shared->sem_active_simulation);
 			philos->data_shared->is_active_simulation = 0;
-			pthread_mutex_unlock(
-				&(philos->data_shared->mutex_active_simulation));
+			sem_post(philos->data_shared->sem_active_simulation);
 			return (1);
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:41 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/12 01:22:27 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/12 00:03:06 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,23 @@ t_data_shared	*get_data_shared(char **argv, int argc)
 	if (!data_shared)
 		return (0);
 	set_data_main(argv, &data_shared->data_main, argc);
-	if (pthread_mutex_init(&data_shared->mutex_active_simulation, NULL) != 0)
-		return (0);
-	if (pthread_mutex_init(&data_shared->mutex_sum_eat, NULL) != 0)
-		return (0);
+	data_shared->sem_active_simulation = sem_open("/as", O_CREAT, 0777, 1);
+	sem_unlink("/as");
+	data_shared->sem_sum_eat = sem_open("/se", O_CREAT, 0777, 1);
+	sem_unlink("/se");
+	data_shared->sem_fork
+		= sem_open("/sf", O_CREAT, 0777, data_shared->data_main.size_philo);
+	sem_unlink("/sf");
+	data_shared->sem_atomic_fork = sem_open("/af", O_CREAT, 0777, 1);
+	if (data_shared->sem_atomic_fork == SEM_FAILED
+		|| data_shared->sem_fork == SEM_FAILED
+		|| data_shared->sem_sum_eat == SEM_FAILED
+		|| data_shared->sem_active_simulation == SEM_FAILED)
+		return (perror("semaphore init: "), NULL);
+	sem_unlink("/af");
 	data_shared->sum_eat = 0;
-	data_shared->is_active_simulation = 1;
 	data_shared->original_timestamp = get_current_time_in_ms();
+	data_shared->is_active_simulation = 1;
 	return (data_shared);
 }
 
@@ -55,16 +65,11 @@ t_philosopher	**get_philosophers(t_data_shared *data_shared)
 	while (i < data_shared->data_main.size_philo)
 	{
 		philosophers[i] = (t_philosopher *)malloc(sizeof(t_philosopher) * 1);
-		if (!philosophers[i]
-			|| pthread_mutex_init(&philosophers[i]->fork.mutex_fork, NULL) != 0)
-			return (0);
 		philosophers[i]->id = i;
 		philosophers[i]->status = THINK;
 		philosophers[i]->thread_id_action = 0;
 		philosophers[i]->time_last_eat = 0;
 		philosophers[i]->timestamp_last_action = 0;
-		philosophers[i]->fork.available = 1;
-		philosophers[i]->fork.last_user = 0;
 		philosophers[i]->number_of_eat = 0;
 		i++;
 	}

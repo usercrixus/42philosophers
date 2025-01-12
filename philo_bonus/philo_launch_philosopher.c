@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 17:43:32 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/11 23:53:41 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/12 00:29:51 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,24 @@ void	*launch_philosophers(void *arg)
 	return (NULL);
 }
 
+void	*launch_set_die(void *arg)
+{
+	t_data_philosopher	*philosopher;
+	int					i;
+
+	philosopher = (t_data_philosopher *)arg;
+	i = 0;
+	while (philosopher->data_shared->is_active_simulation)
+	{
+		usleep(1000 * ft_max(1, (philosopher->data_shared->data_main.time_to_die
+					- (get_current_time_in_ms()
+						- philosopher->self->time_last_eat))));
+		if (is_die(philosopher, get_current_time_in_ms()))
+			set_die(philosopher, get_current_time_in_ms());
+	}
+	return (NULL);
+}
+
 void	manage_launch_philosopher(t_data_philosopher **data_philos)
 {
 	int	i;
@@ -33,12 +51,15 @@ void	manage_launch_philosopher(t_data_philosopher **data_philos)
 	{
 		pthread_create(&(data_philos[i]->self->thread_id_action), NULL,
 			launch_philosophers, data_philos[i]);
+		pthread_create(&(data_philos[i]->self->thread_id_die), NULL,
+			launch_set_die, data_philos[i]);
 		i++;
 	}
 	i = 0;
 	while (i < data_philos[0]->data_shared->data_main.size_philo)
 	{
 		pthread_join(data_philos[i]->self->thread_id_action, NULL);
+		pthread_join(data_philos[i]->self->thread_id_die, NULL);
 		i++;
 	}
 }
