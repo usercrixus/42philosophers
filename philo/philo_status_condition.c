@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 17:38:56 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/13 05:30:54 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/13 08:03:47 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	is_think(t_data_philosopher *philosopher, long timestamp)
 {
 	return (philosopher->self->status == SLEEP
 		&& timestamp - philosopher->self->timestamp_last_action
-		> philosopher->data_shared->data_main.time_to_sleep);
+		>= philosopher->data_shared->data_main.time_to_sleep);
 }
 
 int	is_eat(t_data_philosopher *philos)
@@ -42,5 +42,5 @@ int	is_sleep(t_data_philosopher *philosopher, long timestamp)
 {
 	return (philosopher->self->status == EAT
 		&& timestamp - philosopher->self->timestamp_last_action
-		> philosopher->data_shared->data_main.time_to_eat);
+		>= philosopher->data_shared->data_main.time_to_eat);
 }

@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 17:43:32 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/11 23:53:41 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/13 08:03:12 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@ void	*launch_philosophers(void *arg)
 	philosopher->self->timestamp_last_action = get_current_time_in_ms();
 	philosopher->self->time_last_eat = philosopher->self->timestamp_last_action;
 	print_action(philosopher, "is thinking");
+	if (philosopher->self->id % 2 == 0)
+		usleep(980 * ft_max(1,
+				ft_min(philosopher->data_shared->data_main.time_to_eat,
+					philosopher->data_shared->data_main.time_to_die)));
 	manage_action(philosopher);
 	return (NULL);
 }
