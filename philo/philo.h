@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:52 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/12 01:18:19 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/13 05:25:17 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ typedef struct s_fork
 {
 	int				available;
 	pthread_mutex_t	mutex_fork;
-	t_philosopher	*last_user;
 }	t_fork;
 
 typedef struct s_philosopher

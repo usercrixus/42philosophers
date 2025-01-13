@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:09:41 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/12 01:22:27 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/13 05:25:40 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ t_philosopher	**get_philosophers(t_data_shared *data_shared)
 		philosophers[i]->time_last_eat = 0;
 		philosophers[i]->timestamp_last_action = 0;
 		philosophers[i]->fork.available = 1;
-		philosophers[i]->fork.last_user = 0;
 		philosophers[i]->number_of_eat = 0;
 		i++;
 	}
