@@ -6,7 +6,7 @@
 /*   By: achaisne <achaisne@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 17:21:11 by achaisne          #+#    #+#             */
-/*   Updated: 2025/01/13 05:25:49 by achaisne         ###   ########.fr       */
+/*   Updated: 2025/01/13 05:30:59 by achaisne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	set_eat(t_data_philosopher *philosopher, long timestamp)
 	philosopher->self->status = EAT;
 	philosopher->self->timestamp_last_action = timestamp;
 	philosopher->self->time_last_eat = timestamp;
+	philosopher->self->fork.last_user = philosopher->self;
+	philosopher->left->fork.last_user = philosopher->self;
 	print_action(philosopher, "has taken a fork");
 	print_action(philosopher, "has taken a fork");
 	print_action(philosopher, "is eating");
